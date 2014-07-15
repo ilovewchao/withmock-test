@@ -1,16 +1,16 @@
 package baz
 
 import (
-	"fmt"
+    "fmt"
 )
 
 type Baz struct{
-	name string
+    name string
 }
 
 func (b *Baz) DoSomething() error {
-	if len(b.name) == 0 {
-		return fmt.Errorf("has no name")
-	}
-	return nil
+    if len(b.name) == 0 {
+    	return fmt.Errorf("has no name")
+    }
+    return nil
 }
