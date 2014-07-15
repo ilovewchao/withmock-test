@@ -1,9 +1,9 @@
 package baz
 
 type Baz struct{
-	name string
+    name string
 }
 
 func (b *Baz) DoSomething() string {
-	return "did something"
+    return "did something"
 }
