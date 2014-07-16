@@ -3,7 +3,7 @@ package foo
 import(
     "encoding/json"
     "fmt"
-    "github.com/wchao/example/baz"
+    "github.com/ilovewchao/withmock-test/fail2/baz"
 )
 
 type Foo struct {}
