@@ -4,7 +4,7 @@ import (
     "testing"
     "code.google.com/p/gomock/gomock"
 	
-    "github.com/wchao/example/baz" //mock
+    "github.com/ilovewchao/withmock-test/fail2/baz" //mock
     "encoding/json" //mock
 )
 
