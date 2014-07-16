@@ -2,7 +2,7 @@ package foo
 
 import(
     "fmt"
-    "github.com/wchao/example/baz"
+    "github.com/ilovewchao/withmock-test/success/baz"
 )
 
 type Foo struct {}
