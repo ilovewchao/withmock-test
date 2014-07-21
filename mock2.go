@@ -93,7 +93,7 @@ func (fi *funcInfo) writeReal(out io.Writer) {
 	}
 	fmt.Fprintf(out, "func ")
 	if fi.IsMethod() {
-		if fi.recv.expr[0] == '*' {
+		if fi.recv.expr[0] == '*' && ast.IsExported(fi.name) {
 			fmt.Fprintf(out, "(%s %s) ", fi.recv.name, fi.recv.expr[1:])
 		} else {
 			fmt.Fprintf(out, "(%s %s) ", fi.recv.name, fi.recv.expr)
@@ -1196,7 +1196,6 @@ func (m *mockGen) file(out io.Writer, f *ast.File, filename string) (map[string]
 					recorder = fmt.Sprintf("_%s_Rec", m.exprString(s.X))
 				}
 				m.recorders[t] = recorder
-				fmt.Println(recorder)
 			}
 			for _, param := range d.Type.Params.List {
 				p := field{
