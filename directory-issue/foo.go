@@ -1,5 +1,9 @@
 package foo
 
+import (
+	"fmt"
+)
+
 type Baz struct {
 	name string
 }
