@@ -2,6 +2,7 @@ package foo
 
 import(
 	"net/http"
+	"fmt"
 )
 
 func HttpGet() error {
