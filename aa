@@ -1,0 +1,100 @@
+Go语言打桩 — 三种常用方法
+将函数声明为变量
+gomock
+withmock
+
+package mypkg
+
+import "somepkg"
+
+func MyFunc() {
+  somepkg.SomeFunction()
+}
+
+
+package somepkg
+
+func SomeFunction() int{
+    //do something very complicated.
+}
+
+package somepkg
+
+var SomeFunction = func () int{
+    //do something very complicated.
+}
+
+package mypkg_test import "somepkg "
+
+func TestMyFunc(t *testing.T) {
+     oldFunction =  somepkg. SomeFunction
+     somepkg. SomeFunction = func() int{
+          //simply return 1; 
+     }
+     MyFunc()
+     somepkg. SomeFunction= oldFunction
+}
+
+
+package mypkg_test
+
+import (
+  "somepkg" // mock
+  "code.google.com/p/gomock"
+)
+
+func TestMyFunc(t *testing.T) {
+  ctrl := gomock.NewController()
+  defer crtl.Finish()
+  
+  somepkg.MOCK().SetController(ctrl)
+  somepkg.EXPECT().SomeFunction()
+  MyFunc()
+}
+
+(1) Define an interface that you wish to mock.
+      type MyInterface interface {
+        SomeMethod(x int64, y string)
+      }
+(2) Use mockgen to generate a mock from the interface.
+(3) Use the mock in a test:
+      func TestMyThing(t *testing.T) {
+        mockCtrl := gomock.NewController(t)
+        defer mockCtrl.Finish()
+
+        mockObj := something.NewMockMyInterface(mockCtrl)
+        mockObj.EXPECT().SomeMethod(4, "blah")
+        // pass mockObj to a real object and play with it.
+      }
+      
+      
+工作总结
+表现不错的方面
+  态度端正，工作积极认真
+  学习、适应能力强
+
+有待加强的方面
+  提升工作能力，加强业务知识的学习
+  及时归纳总结，将所学知识转化为输出
+  与项目组成员的沟通交流，对系统的完整理解
+  
+我的收获
+工作氛围的亲身体验
+团队合作能力的锻炼
+规范化开发流程的学习实践
+崭新知识的学习应用
+
+目标计划
+短期目标
+
+长期目标
+     深入学习Cloud Foundry以及PaaS的相关内容知识，争取成为领域专家
+     
+致谢
+感谢导师三个月来的悉心指导与帮助
+感谢项目组所有同事给予的帮助
+感谢华为技术提供学习实践的优秀平台
+感谢各位评委的耐心聆听及批评指正
+
+
+
