@@ -8,3 +8,42 @@
 这群即将走出校门踏入社会的青年，都希望能在这里好好体验工作的氛围，学习课堂中未曾教授的知识，所以他们显得踌躇满志。
 
 十分钟
+
+
+Paas-Controller测试用例运行：ginkgo与withmock使用与冲突解决
+
+1.安装ginkgo与gomega
+	ginkgo和gomega版本应使用paas-controller的Godep目录下的版本，可以直接拷贝到$GOPATH/src/github.com/onsi/目录下。直接go get获得的最新版本暂不可用。
+
+2.安装withmock及依赖包
+	go get github.com/qur/withmock （需要在系统现安装bazaar版本管理工具 apt-get install bzr）
+	go get github.com/bradfitz/goimports
+	go get code.google.com/p/gomock/gomock
+	
+3.修改withmock源码中引入的过时依赖包
+	将$GOPATH/src/github.com/qur/withmock/lib/config.go文件第13行的"launchpad.net/goyaml"改为"github.com/go-yaml/yaml"，第112行err = goyaml.Unmarshal(data, cfg)改为err = yaml.Unmarshal(data, cfg)
+	
+4.解决ginkgo与withmock整合时出现的问题
+	1).删除多余文件
+	ginkgo与withmock整合后应删除$GOPATH/src/github.com/onsi/ginkgo/ginkgo/support/fsnotify/目录下除fsnotify_linux.go之外所fsnotify_*.go形式的文件。由于Windows不能运行withmock，所以默认为Linux系统。
+	2).
+	由于ginkgo测试框架推荐在写测试代码使用dot import引入（. "github.com/onsi/ginkgo" 以及 . "github.com/onsi/gomega"），而这会导致在使用withmock时出现MOCK和EXPECT函数的命名冲突
+	（withmock作者是这样描述的：If two packages are dot imported into the same package then they will produce name clashes on the MOCK and EXPECT functions.）。
+	一个可行的解决方案是新建mock.yml，在其中进行如下配置：
+		mocks:
+		  github.com/onsi/gomega:
+			MOCK: MOCK1
+			EXPECT: EXPECT1
+			obj.EXPECT: EXPECT1
+		  github.com/onsi/ginkgo:
+			MOCK: MOCK2
+			EXPECT: EXPECT2
+			obj.EXPECT: EXPECT2
+	将mock.yml保存到项目工程下，在运行withmock命令时作为配置参数指定即可。
+	
+5.运行测试用例
+	运行命令：withmock -c $GOPATH/src/path/to/project/mock.yml ginkgo ./...
+	
+6.增加覆盖率结果
+	go get code.google.com/p/go.tools/cmd/cover
+	运行命令：withmock -c $GOPATH/src/path/to/project/mock.yml ginkgo -cover ./...
